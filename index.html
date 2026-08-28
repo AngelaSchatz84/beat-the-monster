@@ -77,6 +77,14 @@ button{font:inherit;touch-action:manipulation}
 .victory-actions button{border:0;border-radius:18px;padding:15px 22px;font-weight:1000;font-size:18px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#102526;color:white;padding:11px 18px;border-radius:999px;font-weight:900;opacity:0;pointer-events:none;transition:.2s;z-index:99}
 .toast.show{opacity:1}
+body.simple-mode{--bg1:#2ca85d;--bg2:#176f42;--turq:#42c978;--turq-dark:#21854d;--turq-light:#def7e7}
+body.simple-mode .card{border-color:#86dda8}
+body.simple-mode .level,body.simple-mode .question,body.simple-mode .power strong{color:#21854d}
+body.simple-mode .answer{background:#e2f8e9;border-color:#91dcae}
+body.simple-mode .check{background:#258b50}
+body.simple-mode .next{background:#176f42}
+body.simple-mode .shuffle{border-color:#86dda8}
+body.simple-mode .power{background:#e2f8e9}
 @media(max-width:760px){
  .world-grid{grid-template-columns:1fr}
  .battle-head{grid-template-columns:1fr}
@@ -112,7 +120,7 @@ button{font:inherit;touch-action:manipulation}
     <button class="portal active-world" id="endingPortal">
       <strong>🩵 ENDING MONSTER</strong><span>LEVEL 1 · -S / -ES / -IES</span>
     </button>
-    <button class="portal green locked"><strong>💚 SIMPLE SLIME</strong><span>LEVEL 2 · I / YOU / WE / THEY</span></button>
+    <button class="portal green" id="simplePortal"><strong>💚 SIMPLE SLIME</strong><span>LEVEL 2 · I / YOU / WE / THEY</span></button>
     <button class="portal yellow locked"><strong>💛 S-MONSTER</strong><span>LEVEL 3 · HE / SHE / IT</span></button>
     <button class="portal orange locked"><strong>🧡 NEGATIVE NINJA</strong><span>LEVEL 4 · DON'T / DOESN'T</span></button>
     <button class="portal red locked"><strong>❤️ QUESTION BEAST</strong><span>LEVEL 5 · DO / DOES</span></button>
@@ -123,22 +131,22 @@ button{font:inherit;touch-action:manipulation}
 <section id="battle" class="screen">
   <div class="topbar">
     <button class="world-btn" onclick="showScreen('world')">🌍 WORLD</button>
-    <div class="title-wrap"><div class="top-title">ENDING MONSTER</div><div class="top-sub">DIGITAL BATTLE</div></div>
+    <div class="title-wrap"><div class="top-title" id="battleTitle">ENDING MONSTER</div><div class="top-sub">DIGITAL BATTLE</div></div>
     <div class="counter" id="counter">1 / 48</div>
   </div>
   <div class="battle-wrap">
     <div class="battle-head">
       <div class="monster-box">
-        <img src="ending-monster.png" alt="Ending Monster">
+        <img id="battleMonster" src="ending-monster.png" alt="Ending Monster">
         <div class="lives"><small>MONSTER LIVES</small><div id="hearts">❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️</div></div>
       </div>
       <div class="card">
-        <div class="level">LEVEL 1</div>
-        <div class="task">TRANSFORM THE VERB!</div>
+        <div class="level" id="levelLabel">LEVEL 1</div>
+        <div class="task" id="taskLabel">TRANSFORM THE VERB!</div>
         <div class="verb" id="verb">WATCH</div>
         <div class="arrow">↓</div>
         <div class="question">?</div>
-        <div class="hint">Choose the correct ending: <b>-s</b>, <b>-es</b> or <b>-ies</b>.</div>
+        <div class="hint" id="hintText">Choose the correct ending: <b>-s</b>, <b>-es</b> or <b>-ies</b>.</div>
         <div class="answer" id="answer"></div>
       </div>
     </div>
@@ -153,19 +161,14 @@ button{font:inherit;touch-action:manipulation}
       <button id="wrongBtn" class="action wrong">❌ WRONG · NO HIT</button>
     </div>
     <div class="partner" id="partnerText">🗣️ PLAYER 1 answers · 👀 PLAYER 2 checks</div>
-    <div class="power">
-      <strong>⚗️ ENDING MONSTER'S GRAMMAR POWER</strong>
-      most verbs → <b>-s</b> &nbsp; · &nbsp; -s / -sh / -ch / -x → <b>-es</b><br>
-      go → goes · do → does &nbsp; · &nbsp; consonant + y → <b>-ies</b><br>
-      <small>One child answers. One child checks. Then switch roles.</small>
-    </div>
+    <div class="power" id="powerBox"></div>
   </div>
 </section>
 
 <section id="victory" class="screen center">
   <div class="victory-card">
     <div class="boom">💥 BOOM! 💥</div>
-    <img src="ending-monster.png" alt="Ending Monster">
+    <img id="battleMonster" src="ending-monster.png" alt="Ending Monster">
     <h1>ENDING MONSTER DEFEATED!</h1>
     <div class="star">⭐</div>
     <h2>GRAMMAR POWER EARNED</h2>
@@ -230,6 +233,29 @@ const CARDS = [
 {base:"apply",answer:"applies",ending:"ies"},
 {base:"deny",answer:"denies",ending:"ies"}
 ];
+const SIMPLE_CARDS = [
+{subject:"I",base:"play",rest:"football",answer:"play"},
+{subject:"You",base:"read",rest:"books",answer:"read"},
+{subject:"We",base:"eat",rest:"pizza",answer:"eat"},
+{subject:"They",base:"drink",rest:"water",answer:"drink"},
+{subject:"I",base:"watch",rest:"TV",answer:"watch"},
+{subject:"You",base:"listen to",rest:"music",answer:"listen to"},
+{subject:"We",base:"live in",rest:"Switzerland",answer:"live in"},
+{subject:"They",base:"speak",rest:"English",answer:"speak"},
+{subject:"I",base:"work",rest:"hard",answer:"work"},
+{subject:"You",base:"learn",rest:"fast",answer:"learn"},
+{subject:"We",base:"go to",rest:"school",answer:"go to"},
+{subject:"They",base:"play",rest:"games",answer:"play"},
+{subject:"I",base:"like",rest:"dogs",answer:"like"},
+{subject:"You",base:"help",rest:"friends",answer:"help"},
+{subject:"We",base:"run",rest:"every day",answer:"run"},
+{subject:"They",base:"jump",rest:"high",answer:"jump"},
+{subject:"I",base:"do",rest:"my homework",answer:"do"},
+{subject:"You",base:"wash",rest:"your hands",answer:"wash"},
+{subject:"We",base:"study",rest:"English",answer:"study"},
+{subject:"They",base:"carry",rest:"their bags",answer:"carry"}
+];
+let gameMode = "ending";
 let deck = [];
 let index = 0;
 let lives = 10;
@@ -250,35 +276,52 @@ function showScreen(id) {
   $(id).classList.add('active');
   window.scrollTo(0,0);
 }
-function startNewGame() {
-  deck = shuffle([...CARDS]);
+function configureBattle() {
+  const simple = gameMode === "simple";
+  document.body.classList.toggle("simple-mode", simple);
+  $('battleTitle').textContent = simple ? 'SIMPLE SLIME' : 'ENDING MONSTER';
+  $('battleMonster').src = simple ? 'simple-slime.png' : 'ending-monster.png';
+  $('battleMonster').alt = simple ? 'Simple Slime' : 'Ending Monster';
+  $('levelLabel').textContent = simple ? 'LEVEL 2' : 'LEVEL 1';
+  $('taskLabel').textContent = simple ? 'COMPLETE THE SENTENCE!' : 'TRANSFORM THE VERB!';
+  $('hintText').innerHTML = simple
+    ? 'Use the <b>base verb</b>. No <b>-s</b>!'
+    : 'Choose the correct ending: <b>-s</b>, <b>-es</b> or <b>-ies</b>.';
+  $('powerBox').innerHTML = simple
+    ? "<strong>💚 SIMPLE SLIME'S GRAMMAR POWER</strong>I / you / we / they → <b>base verb</b> &nbsp; · &nbsp; no <b>-s</b><br><small>One child answers. One child checks. Then switch roles.</small>"
+    : "<strong>⚗️ ENDING MONSTER'S GRAMMAR POWER</strong>most verbs → <b>-s</b> &nbsp; · &nbsp; -s / -sh / -ch / -x → <b>-es</b><br>go → goes · do → does &nbsp; · &nbsp; consonant + y → <b>-ies</b><br><small>One child answers. One child checks. Then switch roles.</small>";
+}
+function startNewGame(mode=gameMode) {
+  gameMode = mode;
+  configureBattle();
+  deck = shuffle([...(gameMode === "simple" ? SIMPLE_CARDS : CARDS)]);
   index = 0; lives = 10; player = 1; revealed = false; judged = false;
   render();
   showScreen('battle');
 }
 function suffixMarkup(card) {
   const answer = card.answer.toUpperCase();
-  if(card.ending === 'ies') {
-    const stem = answer.slice(0,-3);
-    return stem + '<span class="sfx-ies">IES</span>';
-  }
-  if(card.ending === 'es') {
-    const stem = answer.slice(0,-2);
-    return stem + '<span class="sfx-es">ES</span>';
-  }
-  const stem = answer.slice(0,-1);
-  return stem + '<span class="sfx-s">S</span>';
+  if(card.ending === 'ies') return answer.slice(0,-3) + '<span class="sfx-ies">IES</span>';
+  if(card.ending === 'es') return answer.slice(0,-2) + '<span class="sfx-es">ES</span>';
+  return answer.slice(0,-1) + '<span class="sfx-s">S</span>';
 }
 function render() {
   const c=deck[index];
-  $('verb').textContent=c.base.toUpperCase();
   $('counter').textContent=(index+1)+' / '+deck.length;
-  $('answer').innerHTML=suffixMarkup(c);
+  if(gameMode === "simple") {
+    $('verb').style.fontSize='clamp(27px,5vw,54px)';
+    $('verb').innerHTML=`${c.subject} <span style="color:#21854d">(${c.base})</span> ${c.rest}`;
+    $('answer').textContent=c.answer.toUpperCase();
+  } else {
+    $('verb').style.fontSize='';
+    $('verb').textContent=c.base.toUpperCase();
+    $('answer').innerHTML=suffixMarkup(c);
+  }
   $('answer').classList.toggle('show',revealed);
   $('checkBtn').textContent=revealed?'🙈 HIDE ANSWER':'🔎 CHECK ANSWER';
   $('judge').classList.toggle('show',revealed && !judged);
   $('hearts').textContent='❤️'.repeat(lives)+'♡'.repeat(10-lives);
-  $('partnerText').textContent = player===1
+  $('partnerText').textContent=player===1
     ? '🗣️ PLAYER 1 answers · 👀 PLAYER 2 checks'
     : '🗣️ PLAYER 2 answers · 👀 PLAYER 1 checks';
 }
@@ -294,17 +337,26 @@ function toast(msg) {
   setTimeout(()=>$('toast').classList.remove('show'),1000);
 }
 $('playBtn').onclick=()=>showScreen('world');
-$('endingPortal').onclick=startNewGame;
+$('endingPortal').onclick=()=>startNewGame('ending');
+$('simplePortal').onclick=()=>startNewGame('simple');
 document.querySelectorAll('.locked').forEach(b=>b.onclick=()=>toast('🔒 Coming soon!'));
 $('checkBtn').onclick=()=>{revealed=!revealed; render();};
 $('nextBtn').onclick=nextCard;
-$('shuffleBtn').onclick=startNewGame;
+$('shuffleBtn').onclick=()=>startNewGame(gameMode);
 $('hitBtn').onclick=()=>{
   if(judged) return;
   judged=true; lives=Math.max(0,lives-1);
   render();
   if(lives===0) {
-    localStorage.setItem('btm-ending-completed','yes');
+    localStorage.setItem(gameMode==='simple'?'btm-simple-completed':'btm-ending-completed','yes');
+    const vTitle=document.querySelector('#victory h1');
+    const vText=document.querySelector('#victory p');
+    const vImg=document.querySelector('#victory img');
+    vTitle.textContent=gameMode==='simple'?'SIMPLE SLIME DEFEATED!':'ENDING MONSTER DEFEATED!';
+    vText.innerHTML=gameMode==='simple'
+      ? 'Great teamwork! You mastered <b>I / you / we / they + base verb</b>.'
+      : 'Great teamwork! You mastered <b>-s, -es and -ies</b>.';
+    vImg.src=gameMode==='simple'?'simple-slime.png':'ending-monster.png';
     setTimeout(()=>showScreen('victory'),350);
   } else {
     toast('💥 HIT! '+lives+' lives left');
@@ -316,7 +368,7 @@ $('wrongBtn').onclick=()=>{
   judged=true; render(); toast('No hit — keep fighting!');
   setTimeout(nextCard,500);
 };
-$('againBtn').onclick=startNewGame;
+$('againBtn').onclick=()=>startNewGame(gameMode);
 
 if('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js').catch(()=>{}));

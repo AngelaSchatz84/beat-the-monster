@@ -122,6 +122,17 @@ body.question-mode .check{background:#c92834}
 body.question-mode .next{background:#8b1821}
 body.question-mode .shuffle{border-color:#e78389}
 body.question-mode .power{background:#f8d6d8}
+
+body.boss-mode{--bg1:#7650a8;--bg2:#4e2f79;--turq:#c7ace7;--turq-dark:#3f245f;--turq-light:#eadcf8}
+body.boss-mode .card{border-color:#b995dc}
+body.boss-mode .level,body.boss-mode .question,body.boss-mode .power strong{color:#4e2f79}
+body.boss-mode .answer{background:#eadcf8;border-color:#b995dc}
+body.boss-mode .check{background:#684493}
+body.boss-mode .next{background:#4e2f79}
+body.boss-mode .shuffle{border-color:#b995dc}
+body.boss-mode .power{background:#eadcf8}
+.mode-pill{display:none;margin:0 auto 10px;padding:7px 14px;border-radius:999px;font-weight:900}
+body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;border:2px solid #b995dc}
 </style>
 </head>
 <body>
@@ -152,7 +163,7 @@ body.question-mode .power{background:#f8d6d8}
     <button class="portal yellow" id="sPortal"><strong>💛 S-MONSTER</strong><span>LEVEL 3 · HE / SHE / IT</span></button>
     <button class="portal orange" id="negativePortal"><strong>🧡 NEGATIVE NINJA</strong><span>LEVEL 4 · DON'T / DOESN'T</span></button>
     <button class="portal red" id="questionPortal"><strong>❤️ QUESTION BEAST</strong><span>LEVEL 5 · DO / DOES</span></button>
-    <button class="portal purple locked"><strong>💜 PRESENT SIMPLE BOSS</strong><span>FINAL LEVEL · EVERYTHING!</span></button>
+    <button class="portal purple" id="bossPortal"><strong>💜 PRESENT SIMPLE BOSS</strong><span>FINAL LEVEL · MIXED CHALLENGE</span></button>
   </div>
 </section>
 
@@ -170,6 +181,7 @@ body.question-mode .power{background:#f8d6d8}
       </div>
       <div class="card">
         <div class="level" id="levelLabel">LEVEL 1</div>
+        <div class="mode-pill" id="modePill"></div>
         <div class="task" id="taskLabel">TRANSFORM THE VERB!</div>
         <div class="verb" id="verb">WATCH</div>
         <div class="arrow">↓</div>
@@ -351,6 +363,48 @@ const QUESTION_CARDS = [
 {subject:"she",base:"study",rest:"English",answer:"Does she study English?"},
 {subject:"they",base:"carry",rest:"their bags",answer:"Do they carry their bags?"}
 ];
+const BOSS_CARDS = [
+{mode:"POSITIVE",subject:"I",base:"play",rest:"football",answer:"play"},
+{mode:"POSITIVE",subject:"She",base:"study",rest:"English",answer:"studies"},
+{mode:"POSITIVE",subject:"They",base:"drink",rest:"water",answer:"drink"},
+{mode:"POSITIVE",subject:"He",base:"watch",rest:"TV",answer:"watches"},
+{mode:"POSITIVE",subject:"We",base:"live",rest:"in Switzerland",answer:"live"},
+{mode:"POSITIVE",subject:"It",base:"fly",rest:"high",answer:"flies"},
+{mode:"POSITIVE",subject:"You",base:"read",rest:"books",answer:"read"},
+{mode:"POSITIVE",subject:"He",base:"go",rest:"to school",answer:"goes"},
+{mode:"POSITIVE",subject:"She",base:"carry",rest:"her bag",answer:"carries"},
+{mode:"POSITIVE",subject:"They",base:"speak",rest:"English",answer:"speak"},
+{mode:"POSITIVE",subject:"He",base:"do",rest:"his homework",answer:"does"},
+{mode:"POSITIVE",subject:"We",base:"eat",rest:"pizza",answer:"eat"},
+{mode:"POSITIVE",subject:"She",base:"try",rest:"again",answer:"tries"},
+{mode:"POSITIVE",subject:"I",base:"listen to",rest:"music",answer:"listen to"},
+{mode:"NEGATIVE",subject:"I",base:"like",rest:"coffee",answer:"I don't like coffee."},
+{mode:"NEGATIVE",subject:"She",base:"play",rest:"tennis",answer:"She doesn't play tennis."},
+{mode:"NEGATIVE",subject:"They",base:"eat",rest:"meat",answer:"They don't eat meat."},
+{mode:"NEGATIVE",subject:"He",base:"watch",rest:"TV",answer:"He doesn't watch TV."},
+{mode:"NEGATIVE",subject:"We",base:"work",rest:"on Sundays",answer:"We don't work on Sundays."},
+{mode:"NEGATIVE",subject:"It",base:"run",rest:"fast",answer:"It doesn't run fast."},
+{mode:"NEGATIVE",subject:"You",base:"drink",rest:"milk",answer:"You don't drink milk."},
+{mode:"NEGATIVE",subject:"She",base:"go",rest:"to school",answer:"She doesn't go to school."},
+{mode:"NEGATIVE",subject:"He",base:"study",rest:"French",answer:"He doesn't study French."},
+{mode:"NEGATIVE",subject:"They",base:"live",rest:"in London",answer:"They don't live in London."},
+{mode:"NEGATIVE",subject:"She",base:"do",rest:"her homework",answer:"She doesn't do her homework."},
+{mode:"NEGATIVE",subject:"He",base:"wash",rest:"the car",answer:"He doesn't wash the car."},
+{mode:"NEGATIVE",subject:"We",base:"play",rest:"chess",answer:"We don't play chess."},
+{mode:"QUESTION",subject:"you",base:"like",rest:"dogs",answer:"Do you like dogs?"},
+{mode:"QUESTION",subject:"she",base:"read",rest:"books",answer:"Does she read books?"},
+{mode:"QUESTION",subject:"they",base:"play",rest:"football",answer:"Do they play football?"},
+{mode:"QUESTION",subject:"he",base:"drink",rest:"water",answer:"Does he drink water?"},
+{mode:"QUESTION",subject:"we",base:"speak",rest:"English",answer:"Do we speak English?"},
+{mode:"QUESTION",subject:"it",base:"run",rest:"fast",answer:"Does it run fast?"},
+{mode:"QUESTION",subject:"she",base:"watch",rest:"TV",answer:"Does she watch TV?"},
+{mode:"QUESTION",subject:"you",base:"go",rest:"to school",answer:"Do you go to school?"},
+{mode:"QUESTION",subject:"he",base:"do",rest:"his homework",answer:"Does he do his homework?"},
+{mode:"QUESTION",subject:"they",base:"live",rest:"in Switzerland",answer:"Do they live in Switzerland?"},
+{mode:"QUESTION",subject:"she",base:"study",rest:"English",answer:"Does she study English?"},
+{mode:"QUESTION",subject:"we",base:"eat",rest:"pizza",answer:"Do we eat pizza?"},
+{mode:"QUESTION",subject:"he",base:"listen to",rest:"music",answer:"Does he listen to music?"}
+];
 let gameMode = "ending";
 let deck = [];
 let index = 0;
@@ -373,17 +427,21 @@ function showScreen(id) {
   window.scrollTo(0,0);
 }
 function configureBattle() {
-  const simple=gameMode==="simple", smode=gameMode==="s", negative=gameMode==="negative", question=gameMode==="question";
+  const simple=gameMode==="simple", smode=gameMode==="s", negative=gameMode==="negative", question=gameMode==="question", boss=gameMode==="boss";
   document.body.classList.toggle("simple-mode",simple);
   document.body.classList.toggle("s-mode",smode);
   document.body.classList.toggle("negative-mode",negative);
   document.body.classList.toggle("question-mode",question);
-  $('battleTitle').textContent=question?'QUESTION BEAST':negative?'NEGATIVE NINJA':smode?'S-MONSTER':simple?'SIMPLE SLIME':'ENDING MONSTER';
-  $('battleMonster').src=question?'question-beast.png':negative?'negative-ninja.png':smode?'s-monster.png':simple?'simple-slime.png':'ending-monster.png';
-  $('battleMonster').alt=question?'Question Beast':negative?'Negative Ninja':smode?'S-Monster':simple?'Simple Slime':'Ending Monster';
-  $('levelLabel').textContent=question?'LEVEL 5':negative?'LEVEL 4':smode?'LEVEL 3':simple?'LEVEL 2':'LEVEL 1';
-  $('taskLabel').textContent=question?'MAKE A QUESTION!':negative?'MAKE IT NEGATIVE!':(simple||smode)?'COMPLETE THE SENTENCE!':'TRANSFORM THE VERB!';
-  if(question){
+  document.body.classList.toggle("boss-mode",boss);
+  $('battleTitle').textContent=boss?'PRESENT SIMPLE BOSS':question?'QUESTION BEAST':negative?'NEGATIVE NINJA':smode?'S-MONSTER':simple?'SIMPLE SLIME':'ENDING MONSTER';
+  $('battleMonster').src=boss?'present-simple-boss.png':question?'question-beast.png':negative?'negative-ninja.png':smode?'s-monster.png':simple?'simple-slime.png':'ending-monster.png';
+  $('battleMonster').alt=boss?'Present Simple Boss':question?'Question Beast':negative?'Negative Ninja':smode?'S-Monster':simple?'Simple Slime':'Ending Monster';
+  $('levelLabel').textContent=boss?'FINAL LEVEL':question?'LEVEL 5':negative?'LEVEL 4':smode?'LEVEL 3':simple?'LEVEL 2':'LEVEL 1';
+  $('taskLabel').textContent=boss?'MIXED PRESENT SIMPLE CHALLENGE!':question?'MAKE A QUESTION!':negative?'MAKE IT NEGATIVE!':(simple||smode)?'COMPLETE THE SENTENCE!':'TRANSFORM THE VERB!';
+  if(boss){
+    $('hintText').innerHTML="Read the mode carefully: <b>positive</b>, <b>negative</b> or <b>question</b>.";
+    $('powerBox').innerHTML="<strong>💜 BOSS GRAMMAR POWER</strong>I / you / we / they → <b>verb</b><br>he / she / it → <b>verb + s / es / ies</b><br>negative → <b>don't / doesn't + verb</b><br>question → <b>Do / Does + subject + verb?</b><br><small>One child answers. One child checks. Then switch roles.</small>";
+  }else if(question){
     $('hintText').innerHTML="Choose <b>Do</b> or <b>Does</b>. Then use the <b>base verb</b>.";
     $('powerBox').innerHTML="<strong>❤️ QUESTION BEAST'S GRAMMAR POWER</strong>I / you / we / they → <b>Do ...?</b><br>he / she / it → <b>Does ...?</b><br>After Do / Does, use the <b>base verb</b>.<br><small>One child answers. One child checks. Then switch roles.</small>";
   }else if(negative){
@@ -406,7 +464,7 @@ function startNewGame(mode=gameMode){
   deck=shuffle([...source]); index=0;lives=10;player=1;revealed=false;judged=false;render();showScreen('battle');
 }
 function negativeDeckSource(){
-  return gameMode==="question"?QUESTION_CARDS:gameMode==="negative"?NEGATIVE_CARDS:gameMode==="s"?S_CARDS:gameMode==="simple"?SIMPLE_CARDS:CARDS;
+  return gameMode==="boss"?BOSS_CARDS:gameMode==="question"?QUESTION_CARDS:gameMode==="negative"?NEGATIVE_CARDS:gameMode==="s"?S_CARDS:gameMode==="simple"?SIMPLE_CARDS:CARDS;
 }
 function suffixMarkup(card){
   const answer=card.answer.toUpperCase();
@@ -416,20 +474,30 @@ function suffixMarkup(card){
 }
 function render(){
   const c=deck[index]; $('counter').textContent=(index+1)+' / '+deck.length;
-  if(gameMode==="question"){
+  if(gameMode==="boss"){
+    $('modePill').style.display='inline-block';
+    $('modePill').textContent=c.mode;
+    $('verb').style.fontSize='clamp(25px,4.6vw,50px)';
+    $('verb').innerHTML=`${c.subject} <span style="color:#4e2f79">(${c.base})</span> ${c.rest}`;
+    $('answer').textContent=c.answer.toUpperCase();
+  }else if(gameMode==="question"){
+    $('modePill').style.display='none';
     $('verb').style.fontSize='clamp(25px,4.6vw,50px)';
     $('verb').innerHTML=`${c.subject} <span style="color:#8b1821">(${c.base})</span> ${c.rest}`;
     $('answer').textContent=c.answer.toUpperCase();
   }else if(gameMode==="negative"){
+    $('modePill').style.display='none';
     $('verb').style.fontSize='clamp(25px,4.6vw,50px)';
     $('verb').innerHTML=`${c.subject} <span style="color:#b95105">(${c.base})</span> ${c.rest}`;
     $('answer').textContent=c.answer.toUpperCase();
   }else if(gameMode==="simple"||gameMode==="s"){
+    $('modePill').style.display='none';
     const accent=gameMode==="s"?'#9b6907':'#21854d';
     $('verb').style.fontSize='clamp(27px,5vw,54px)';
     $('verb').innerHTML=`${c.subject} <span style="color:${accent}">(${c.base})</span> ${c.rest}`;
     $('answer').textContent=c.answer.toUpperCase();
   }else{
+    $('modePill').style.display='none';
     $('verb').style.fontSize='';$('verb').textContent=c.base.toUpperCase();$('answer').innerHTML=suffixMarkup(c);
   }
   $('answer').classList.toggle('show',revealed);
@@ -455,6 +523,7 @@ $('simplePortal').onclick=()=>startNewGame('simple');
 $('sPortal').onclick=()=>startNewGame('s');
 $('negativePortal').onclick=()=>startNewGame('negative');
 $('questionPortal').onclick=()=>startNewGame('question');
+$('bossPortal').onclick=()=>startNewGame('boss');
 document.querySelectorAll('.locked').forEach(b=>b.onclick=()=>toast('🔒 Coming soon!'));
 $('checkBtn').onclick=()=>{revealed=!revealed; render();};
 $('nextBtn').onclick=nextCard;
@@ -464,12 +533,16 @@ $('hitBtn').onclick=()=>{
   judged=true; lives=Math.max(0,lives-1);
   render();
   if(lives===0) {
-    const storageKey = gameMode==='question' ? 'btm-question-completed' : (gameMode==='negative' ? 'btm-negative-completed' : (gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed')));
+    const storageKey = gameMode==='boss' ? 'btm-boss-completed' : (gameMode==='question' ? 'btm-question-completed' : (gameMode==='negative' ? 'btm-negative-completed' : (gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed'))));
     localStorage.setItem(storageKey,'yes');
     const vTitle=document.querySelector('#victory h1');
     const vText=document.querySelector('#victory p');
     const vImg=document.querySelector('#victory img');
-    if(gameMode==='question'){
+    if(gameMode==='boss'){
+      vTitle.textContent='PRESENT SIMPLE BOSS DEFEATED!';
+      vText.innerHTML='You mastered the <b>Present Simple</b> — positive, negative and questions!';
+      vImg.src='present-simple-boss.png';
+    } else if(gameMode==='question'){
       vTitle.textContent='QUESTION BEAST DEFEATED!';
       vText.innerHTML='Great teamwork! You mastered <b>Do / Does + subject + base verb?</b>';
       vImg.src='question-beast.png';

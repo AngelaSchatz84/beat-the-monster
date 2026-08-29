@@ -592,6 +592,32 @@ explosion.className='explosion';
 explosion.textContent='💥';
 
 monsterBox.appendChild(explosion);
+if(lives===0){
+  const explosion2=document.createElement('div');
+  explosion2.className='explosion';
+  explosion2.textContent='💥';
+  explosion2.style.left='35%';
+  explosion2.style.top='30%';
+
+  monsterBox.appendChild(explosion2);
+
+  setTimeout(()=>{
+    explosion2.remove();
+  },500);
+}
+if(lives===0){
+  const explosion3=document.createElement('div');
+  explosion3.className='explosion';
+  explosion3.textContent='💥';
+  explosion3.style.left='68%';
+  explosion3.style.top='55%';
+
+  monsterBox.appendChild(explosion3);
+
+  setTimeout(()=>{
+    explosion3.remove();
+  },650);
+}
 setTimeout(()=>{
   explosion.remove();
   monsterBox.classList.remove('hit-flash');

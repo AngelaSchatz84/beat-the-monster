@@ -104,6 +104,15 @@ body.s-mode .next{background:#9b6907}
 body.s-mode .shuffle{border-color:#f2d267}
 body.s-mode .power{background:#fff1b8}
 
+
+body.negative-mode{--bg1:#f28c18;--bg2:#d96808;--turq:#ffc36e;--turq-dark:#b95105;--turq-light:#ffe6bf}
+body.negative-mode .card{border-color:#f5ad4e}
+body.negative-mode .level,body.negative-mode .question,body.negative-mode .power strong{color:#b95105}
+body.negative-mode .answer{background:#ffe6bf;border-color:#f5ad4e}
+body.negative-mode .check{background:#e57a0d}
+body.negative-mode .next{background:#b95105}
+body.negative-mode .shuffle{border-color:#f5ad4e}
+body.negative-mode .power{background:#ffe6bf}
 </style>
 </head>
 <body>
@@ -132,7 +141,7 @@ body.s-mode .power{background:#fff1b8}
     </button>
     <button class="portal green" id="simplePortal"><strong>💚 SIMPLE SLIME</strong><span>LEVEL 2 · I / YOU / WE / THEY</span></button>
     <button class="portal yellow" id="sPortal"><strong>💛 S-MONSTER</strong><span>LEVEL 3 · HE / SHE / IT</span></button>
-    <button class="portal orange locked"><strong>🧡 NEGATIVE NINJA</strong><span>LEVEL 4 · DON'T / DOESN'T</span></button>
+    <button class="portal orange" id="negativePortal"><strong>🧡 NEGATIVE NINJA</strong><span>LEVEL 4 · DON'T / DOESN'T</span></button>
     <button class="portal red locked"><strong>❤️ QUESTION BEAST</strong><span>LEVEL 5 · DO / DOES</span></button>
     <button class="portal purple locked"><strong>💜 PRESENT SIMPLE BOSS</strong><span>FINAL LEVEL · EVERYTHING!</span></button>
   </div>
@@ -289,6 +298,28 @@ const S_CARDS = [
 {subject:"She",base:"speak",rest:"English",answer:"speaks"}
 ];
 
+const NEGATIVE_CARDS = [
+{subject:"I",base:"play",rest:"football",answer:"I don't play football."},
+{subject:"You",base:"read",rest:"books",answer:"You don't read books."},
+{subject:"We",base:"eat",rest:"pizza",answer:"We don't eat pizza."},
+{subject:"They",base:"drink",rest:"water",answer:"They don't drink water."},
+{subject:"He",base:"watch",rest:"TV",answer:"He doesn't watch TV."},
+{subject:"She",base:"like",rest:"dogs",answer:"She doesn't like dogs."},
+{subject:"It",base:"run",rest:"fast",answer:"It doesn't run fast."},
+{subject:"He",base:"go",rest:"to school",answer:"He doesn't go to school."},
+{subject:"She",base:"study",rest:"English",answer:"She doesn't study English."},
+{subject:"I",base:"listen to",rest:"music",answer:"I don't listen to music."},
+{subject:"You",base:"help",rest:"your friends",answer:"You don't help your friends."},
+{subject:"We",base:"live",rest:"in Switzerland",answer:"We don't live in Switzerland."},
+{subject:"They",base:"speak",rest:"English",answer:"They don't speak English."},
+{subject:"He",base:"do",rest:"his homework",answer:"He doesn't do his homework."},
+{subject:"She",base:"wash",rest:"her hands",answer:"She doesn't wash her hands."},
+{subject:"It",base:"fly",rest:"high",answer:"It doesn't fly high."},
+{subject:"I",base:"work",rest:"on Sundays",answer:"I don't work on Sundays."},
+{subject:"You",base:"eat",rest:"meat",answer:"You don't eat meat."},
+{subject:"He",base:"play",rest:"tennis",answer:"He doesn't play tennis."},
+{subject:"She",base:"carry",rest:"a bag",answer:"She doesn't carry a bag."}
+];
 let gameMode = "ending";
 let deck = [];
 let index = 0;
@@ -311,63 +342,62 @@ function showScreen(id) {
   window.scrollTo(0,0);
 }
 function configureBattle() {
-  const simple = gameMode === "simple";
-  const smode = gameMode === "s";
-  document.body.classList.toggle("simple-mode", simple);
-  document.body.classList.toggle("s-mode", smode);
-
-  $('battleTitle').textContent = smode ? 'S-MONSTER' : (simple ? 'SIMPLE SLIME' : 'ENDING MONSTER');
-  $('battleMonster').src = smode ? 's-monster.png' : (simple ? 'simple-slime.png' : 'ending-monster.png');
-  $('battleMonster').alt = smode ? 'S-Monster' : (simple ? 'Simple Slime' : 'Ending Monster');
-  $('levelLabel').textContent = smode ? 'LEVEL 3' : (simple ? 'LEVEL 2' : 'LEVEL 1');
-  $('taskLabel').textContent = (simple || smode) ? 'COMPLETE THE SENTENCE!' : 'TRANSFORM THE VERB!';
-
-  if(smode){
-    $('hintText').innerHTML = '<b>He / she / it</b> need <b>-s, -es or -ies</b>.';
-    $('powerBox').innerHTML = "<strong>💛 S-MONSTER'S GRAMMAR POWER</strong>he / she / it → verb + <b>-s / -es / -ies</b><br><small>One child answers. One child checks. Then switch roles.</small>";
-  } else if(simple){
-    $('hintText').innerHTML = 'Use the <b>base verb</b>. No <b>-s</b>!';
-    $('powerBox').innerHTML = "<strong>💚 SIMPLE SLIME'S GRAMMAR POWER</strong>I / you / we / they → <b>base verb</b> &nbsp; · &nbsp; no <b>-s</b><br><small>One child answers. One child checks. Then switch roles.</small>";
-  } else {
-    $('hintText').innerHTML = 'Choose the correct ending: <b>-s</b>, <b>-es</b> or <b>-ies</b>.';
-    $('powerBox').innerHTML = "<strong>⚗️ ENDING MONSTER'S GRAMMAR POWER</strong>most verbs → <b>-s</b> &nbsp; · &nbsp; -s / -sh / -ch / -x → <b>-es</b><br>go → goes · do → does &nbsp; · &nbsp; consonant + y → <b>-ies</b><br><small>One child answers. One child checks. Then switch roles.</small>";
+  const simple=gameMode==="simple", smode=gameMode==="s", negative=gameMode==="negative";
+  document.body.classList.toggle("simple-mode",simple);
+  document.body.classList.toggle("s-mode",smode);
+  document.body.classList.toggle("negative-mode",negative);
+  $('battleTitle').textContent=negative?'NEGATIVE NINJA':smode?'S-MONSTER':simple?'SIMPLE SLIME':'ENDING MONSTER';
+  $('battleMonster').src=negative?'negative-ninja.png':smode?'s-monster.png':simple?'simple-slime.png':'ending-monster.png';
+  $('battleMonster').alt=negative?'Negative Ninja':smode?'S-Monster':simple?'Simple Slime':'Ending Monster';
+  $('levelLabel').textContent=negative?'LEVEL 4':smode?'LEVEL 3':simple?'LEVEL 2':'LEVEL 1';
+  $('taskLabel').textContent=negative?'MAKE IT NEGATIVE!':(simple||smode)?'COMPLETE THE SENTENCE!':'TRANSFORM THE VERB!';
+  if(negative){
+    $('hintText').innerHTML="Choose <b>don't</b> or <b>doesn't</b>. Then use the <b>base verb</b>.";
+    $('powerBox').innerHTML="<strong>🧡 NEGATIVE NINJA'S GRAMMAR POWER</strong>I / you / we / they → <b>don't + verb</b><br>he / she / it → <b>doesn't + verb</b><br>After don't / doesn't, use the <b>base verb</b>.<br><small>One child answers. One child checks. Then switch roles.</small>";
+  }else if(smode){
+    $('hintText').innerHTML='<b>He / she / it</b> need <b>-s, -es or -ies</b>.';
+    $('powerBox').innerHTML="<strong>💛 S-MONSTER'S GRAMMAR POWER</strong>he / she / it → verb + <b>-s / -es / -ies</b><br><small>One child answers. One child checks. Then switch roles.</small>";
+  }else if(simple){
+    $('hintText').innerHTML='Use the <b>base verb</b>. No <b>-s</b>!';
+    $('powerBox').innerHTML="<strong>💚 SIMPLE SLIME'S GRAMMAR POWER</strong>I / you / we / they → <b>base verb</b> · no <b>-s</b><br><small>One child answers. One child checks. Then switch roles.</small>";
+  }else{
+    $('hintText').innerHTML='Choose the correct ending: <b>-s</b>, <b>-es</b> or <b>-ies</b>.';
+    $('powerBox').innerHTML="<strong>⚗️ ENDING MONSTER'S GRAMMAR POWER</strong>most verbs → <b>-s</b> · -s / -sh / -ch / -x → <b>-es</b><br>go → goes · do → does · consonant + y → <b>-ies</b><br><small>One child answers. One child checks. Then switch roles.</small>";
   }
 }
-function startNewGame(mode=gameMode) {
-  gameMode = mode;
-  configureBattle();
-  const source = gameMode === "s" ? S_CARDS : (gameMode === "simple" ? SIMPLE_CARDS : CARDS);
-  deck = shuffle([...source]);
-  index = 0; lives = 10; player = 1; revealed = false; judged = false;
-  render();
-  showScreen('battle');
+function startNewGame(mode=gameMode){
+  gameMode=mode; configureBattle();
+  const source=negativeDeckSource();
+  deck=shuffle([...source]); index=0;lives=10;player=1;revealed=false;judged=false;render();showScreen('battle');
 }
-function suffixMarkup(card) {
-  const answer = card.answer.toUpperCase();
-  if(card.ending === 'ies') return answer.slice(0,-3) + '<span class="sfx-ies">IES</span>';
-  if(card.ending === 'es') return answer.slice(0,-2) + '<span class="sfx-es">ES</span>';
-  return answer.slice(0,-1) + '<span class="sfx-s">S</span>';
+function negativeDeckSource(){
+  return gameMode==="negative"?NEGATIVE_CARDS:gameMode==="s"?S_CARDS:gameMode==="simple"?SIMPLE_CARDS:CARDS;
 }
-function render() {
-  const c=deck[index];
-  $('counter').textContent=(index+1)+' / '+deck.length;
-  if(gameMode === "simple" || gameMode === "s") {
-    const accent = gameMode === "s" ? '#9b6907' : '#21854d';
+function suffixMarkup(card){
+  const answer=card.answer.toUpperCase();
+  if(card.ending==='ies')return answer.slice(0,-3)+'<span class="sfx-ies">IES</span>';
+  if(card.ending==='es')return answer.slice(0,-2)+'<span class="sfx-es">ES</span>';
+  return answer.slice(0,-1)+'<span class="sfx-s">S</span>';
+}
+function render(){
+  const c=deck[index]; $('counter').textContent=(index+1)+' / '+deck.length;
+  if(gameMode==="negative"){
+    $('verb').style.fontSize='clamp(25px,4.6vw,50px)';
+    $('verb').innerHTML=`${c.subject} <span style="color:#b95105">(${c.base})</span> ${c.rest}`;
+    $('answer').textContent=c.answer.toUpperCase();
+  }else if(gameMode==="simple"||gameMode==="s"){
+    const accent=gameMode==="s"?'#9b6907':'#21854d';
     $('verb').style.fontSize='clamp(27px,5vw,54px)';
     $('verb').innerHTML=`${c.subject} <span style="color:${accent}">(${c.base})</span> ${c.rest}`;
     $('answer').textContent=c.answer.toUpperCase();
-  } else {
-    $('verb').style.fontSize='';
-    $('verb').textContent=c.base.toUpperCase();
-    $('answer').innerHTML=suffixMarkup(c);
+  }else{
+    $('verb').style.fontSize='';$('verb').textContent=c.base.toUpperCase();$('answer').innerHTML=suffixMarkup(c);
   }
   $('answer').classList.toggle('show',revealed);
   $('checkBtn').textContent=revealed?'🙈 HIDE ANSWER':'🔎 CHECK ANSWER';
-  $('judge').classList.toggle('show',revealed && !judged);
+  $('judge').classList.toggle('show',revealed&&!judged);
   $('hearts').textContent='❤️'.repeat(lives)+'♡'.repeat(10-lives);
-  $('partnerText').textContent=player===1
-    ? '🗣️ PLAYER 1 answers · 👀 PLAYER 2 checks'
-    : '🗣️ PLAYER 2 answers · 👀 PLAYER 1 checks';
+  $('partnerText').textContent=player===1?'🗣️ PLAYER 1 answers · 👀 PLAYER 2 checks':'🗣️ PLAYER 2 answers · 👀 PLAYER 1 checks';
 }
 function nextCard() {
   index=(index+1)%deck.length;
@@ -384,6 +414,7 @@ $('playBtn').onclick=()=>showScreen('world');
 $('endingPortal').onclick=()=>startNewGame('ending');
 $('simplePortal').onclick=()=>startNewGame('simple');
 $('sPortal').onclick=()=>startNewGame('s');
+$('negativePortal').onclick=()=>startNewGame('negative');
 document.querySelectorAll('.locked').forEach(b=>b.onclick=()=>toast('🔒 Coming soon!'));
 $('checkBtn').onclick=()=>{revealed=!revealed; render();};
 $('nextBtn').onclick=nextCard;
@@ -393,12 +424,16 @@ $('hitBtn').onclick=()=>{
   judged=true; lives=Math.max(0,lives-1);
   render();
   if(lives===0) {
-    const storageKey = gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed');
+    const storageKey = gameMode==='negative' ? 'btm-negative-completed' : (gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed'));
     localStorage.setItem(storageKey,'yes');
     const vTitle=document.querySelector('#victory h1');
     const vText=document.querySelector('#victory p');
     const vImg=document.querySelector('#victory img');
-    if(gameMode==='s'){
+    if(gameMode==='negative'){
+      vTitle.textContent='NEGATIVE NINJA DEFEATED!';
+      vText.innerHTML="Great teamwork! You mastered <b>don't / doesn't + base verb</b>.";
+      vImg.src='negative-ninja.png';
+    } else if(gameMode==='s'){
       vTitle.textContent='S-MONSTER DEFEATED!';
       vText.innerHTML='Great teamwork! You mastered <b>he / she / it + -s, -es or -ies</b>.';
       vImg.src='s-monster.png';

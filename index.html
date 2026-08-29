@@ -113,6 +113,15 @@ body.negative-mode .check{background:#e57a0d}
 body.negative-mode .next{background:#b95105}
 body.negative-mode .shuffle{border-color:#f5ad4e}
 body.negative-mode .power{background:#ffe6bf}
+
+body.question-mode{--bg1:#d92f3a;--bg2:#9f1f29;--turq:#f39aa0;--turq-dark:#8b1821;--turq-light:#f8d6d8}
+body.question-mode .card{border-color:#e78389}
+body.question-mode .level,body.question-mode .question,body.question-mode .power strong{color:#8b1821}
+body.question-mode .answer{background:#f8d6d8;border-color:#e78389}
+body.question-mode .check{background:#c92834}
+body.question-mode .next{background:#8b1821}
+body.question-mode .shuffle{border-color:#e78389}
+body.question-mode .power{background:#f8d6d8}
 </style>
 </head>
 <body>
@@ -142,7 +151,7 @@ body.negative-mode .power{background:#ffe6bf}
     <button class="portal green" id="simplePortal"><strong>💚 SIMPLE SLIME</strong><span>LEVEL 2 · I / YOU / WE / THEY</span></button>
     <button class="portal yellow" id="sPortal"><strong>💛 S-MONSTER</strong><span>LEVEL 3 · HE / SHE / IT</span></button>
     <button class="portal orange" id="negativePortal"><strong>🧡 NEGATIVE NINJA</strong><span>LEVEL 4 · DON'T / DOESN'T</span></button>
-    <button class="portal red locked"><strong>❤️ QUESTION BEAST</strong><span>LEVEL 5 · DO / DOES</span></button>
+    <button class="portal red" id="questionPortal"><strong>❤️ QUESTION BEAST</strong><span>LEVEL 5 · DO / DOES</span></button>
     <button class="portal purple locked"><strong>💜 PRESENT SIMPLE BOSS</strong><span>FINAL LEVEL · EVERYTHING!</span></button>
   </div>
 </section>
@@ -320,6 +329,28 @@ const NEGATIVE_CARDS = [
 {subject:"He",base:"play",rest:"tennis",answer:"He doesn't play tennis."},
 {subject:"She",base:"carry",rest:"a bag",answer:"She doesn't carry a bag."}
 ];
+const QUESTION_CARDS = [
+{subject:"you",base:"play",rest:"football",answer:"Do you play football?"},
+{subject:"she",base:"read",rest:"books",answer:"Does she read books?"},
+{subject:"they",base:"eat",rest:"pizza",answer:"Do they eat pizza?"},
+{subject:"he",base:"drink",rest:"water",answer:"Does he drink water?"},
+{subject:"you",base:"watch",rest:"TV",answer:"Do you watch TV?"},
+{subject:"she",base:"listen to",rest:"music",answer:"Does she listen to music?"},
+{subject:"we",base:"live",rest:"in Switzerland",answer:"Do we live in Switzerland?"},
+{subject:"he",base:"speak",rest:"English",answer:"Does he speak English?"},
+{subject:"they",base:"work",rest:"hard",answer:"Do they work hard?"},
+{subject:"she",base:"learn",rest:"fast",answer:"Does she learn fast?"},
+{subject:"you",base:"go",rest:"to school",answer:"Do you go to school?"},
+{subject:"he",base:"play",rest:"games",answer:"Does he play games?"},
+{subject:"we",base:"like",rest:"dogs",answer:"Do we like dogs?"},
+{subject:"she",base:"help",rest:"her friends",answer:"Does she help her friends?"},
+{subject:"they",base:"run",rest:"every day",answer:"Do they run every day?"},
+{subject:"it",base:"jump",rest:"high",answer:"Does it jump high?"},
+{subject:"he",base:"do",rest:"his homework",answer:"Does he do his homework?"},
+{subject:"you",base:"wash",rest:"your hands",answer:"Do you wash your hands?"},
+{subject:"she",base:"study",rest:"English",answer:"Does she study English?"},
+{subject:"they",base:"carry",rest:"their bags",answer:"Do they carry their bags?"}
+];
 let gameMode = "ending";
 let deck = [];
 let index = 0;
@@ -342,16 +373,20 @@ function showScreen(id) {
   window.scrollTo(0,0);
 }
 function configureBattle() {
-  const simple=gameMode==="simple", smode=gameMode==="s", negative=gameMode==="negative";
+  const simple=gameMode==="simple", smode=gameMode==="s", negative=gameMode==="negative", question=gameMode==="question";
   document.body.classList.toggle("simple-mode",simple);
   document.body.classList.toggle("s-mode",smode);
   document.body.classList.toggle("negative-mode",negative);
-  $('battleTitle').textContent=negative?'NEGATIVE NINJA':smode?'S-MONSTER':simple?'SIMPLE SLIME':'ENDING MONSTER';
-  $('battleMonster').src=negative?'negative-ninja.png':smode?'s-monster.png':simple?'simple-slime.png':'ending-monster.png';
-  $('battleMonster').alt=negative?'Negative Ninja':smode?'S-Monster':simple?'Simple Slime':'Ending Monster';
-  $('levelLabel').textContent=negative?'LEVEL 4':smode?'LEVEL 3':simple?'LEVEL 2':'LEVEL 1';
-  $('taskLabel').textContent=negative?'MAKE IT NEGATIVE!':(simple||smode)?'COMPLETE THE SENTENCE!':'TRANSFORM THE VERB!';
-  if(negative){
+  document.body.classList.toggle("question-mode",question);
+  $('battleTitle').textContent=question?'QUESTION BEAST':negative?'NEGATIVE NINJA':smode?'S-MONSTER':simple?'SIMPLE SLIME':'ENDING MONSTER';
+  $('battleMonster').src=question?'question-beast.png':negative?'negative-ninja.png':smode?'s-monster.png':simple?'simple-slime.png':'ending-monster.png';
+  $('battleMonster').alt=question?'Question Beast':negative?'Negative Ninja':smode?'S-Monster':simple?'Simple Slime':'Ending Monster';
+  $('levelLabel').textContent=question?'LEVEL 5':negative?'LEVEL 4':smode?'LEVEL 3':simple?'LEVEL 2':'LEVEL 1';
+  $('taskLabel').textContent=question?'MAKE A QUESTION!':negative?'MAKE IT NEGATIVE!':(simple||smode)?'COMPLETE THE SENTENCE!':'TRANSFORM THE VERB!';
+  if(question){
+    $('hintText').innerHTML="Choose <b>Do</b> or <b>Does</b>. Then use the <b>base verb</b>.";
+    $('powerBox').innerHTML="<strong>❤️ QUESTION BEAST'S GRAMMAR POWER</strong>I / you / we / they → <b>Do ...?</b><br>he / she / it → <b>Does ...?</b><br>After Do / Does, use the <b>base verb</b>.<br><small>One child answers. One child checks. Then switch roles.</small>";
+  }else if(negative){
     $('hintText').innerHTML="Choose <b>don't</b> or <b>doesn't</b>. Then use the <b>base verb</b>.";
     $('powerBox').innerHTML="<strong>🧡 NEGATIVE NINJA'S GRAMMAR POWER</strong>I / you / we / they → <b>don't + verb</b><br>he / she / it → <b>doesn't + verb</b><br>After don't / doesn't, use the <b>base verb</b>.<br><small>One child answers. One child checks. Then switch roles.</small>";
   }else if(smode){
@@ -371,7 +406,7 @@ function startNewGame(mode=gameMode){
   deck=shuffle([...source]); index=0;lives=10;player=1;revealed=false;judged=false;render();showScreen('battle');
 }
 function negativeDeckSource(){
-  return gameMode==="negative"?NEGATIVE_CARDS:gameMode==="s"?S_CARDS:gameMode==="simple"?SIMPLE_CARDS:CARDS;
+  return gameMode==="question"?QUESTION_CARDS:gameMode==="negative"?NEGATIVE_CARDS:gameMode==="s"?S_CARDS:gameMode==="simple"?SIMPLE_CARDS:CARDS;
 }
 function suffixMarkup(card){
   const answer=card.answer.toUpperCase();
@@ -381,7 +416,11 @@ function suffixMarkup(card){
 }
 function render(){
   const c=deck[index]; $('counter').textContent=(index+1)+' / '+deck.length;
-  if(gameMode==="negative"){
+  if(gameMode==="question"){
+    $('verb').style.fontSize='clamp(25px,4.6vw,50px)';
+    $('verb').innerHTML=`${c.subject} <span style="color:#8b1821">(${c.base})</span> ${c.rest}`;
+    $('answer').textContent=c.answer.toUpperCase();
+  }else if(gameMode==="negative"){
     $('verb').style.fontSize='clamp(25px,4.6vw,50px)';
     $('verb').innerHTML=`${c.subject} <span style="color:#b95105">(${c.base})</span> ${c.rest}`;
     $('answer').textContent=c.answer.toUpperCase();
@@ -415,6 +454,7 @@ $('endingPortal').onclick=()=>startNewGame('ending');
 $('simplePortal').onclick=()=>startNewGame('simple');
 $('sPortal').onclick=()=>startNewGame('s');
 $('negativePortal').onclick=()=>startNewGame('negative');
+$('questionPortal').onclick=()=>startNewGame('question');
 document.querySelectorAll('.locked').forEach(b=>b.onclick=()=>toast('🔒 Coming soon!'));
 $('checkBtn').onclick=()=>{revealed=!revealed; render();};
 $('nextBtn').onclick=nextCard;
@@ -424,12 +464,16 @@ $('hitBtn').onclick=()=>{
   judged=true; lives=Math.max(0,lives-1);
   render();
   if(lives===0) {
-    const storageKey = gameMode==='negative' ? 'btm-negative-completed' : (gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed'));
+    const storageKey = gameMode==='question' ? 'btm-question-completed' : (gameMode==='negative' ? 'btm-negative-completed' : (gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed')));
     localStorage.setItem(storageKey,'yes');
     const vTitle=document.querySelector('#victory h1');
     const vText=document.querySelector('#victory p');
     const vImg=document.querySelector('#victory img');
-    if(gameMode==='negative'){
+    if(gameMode==='question'){
+      vTitle.textContent='QUESTION BEAST DEFEATED!';
+      vText.innerHTML='Great teamwork! You mastered <b>Do / Does + subject + base verb?</b>';
+      vImg.src='question-beast.png';
+    } else if(gameMode==='negative'){
       vTitle.textContent='NEGATIVE NINJA DEFEATED!';
       vText.innerHTML="Great teamwork! You mastered <b>don't / doesn't + base verb</b>.";
       vImg.src='negative-ninja.png';

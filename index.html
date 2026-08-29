@@ -35,7 +35,7 @@ button{font:inherit;touch-action:manipulation}
 .top-sub{font-size:12px;letter-spacing:.18em;font-weight:900;opacity:.95}
 .counter{justify-self:end;font-size:clamp(16px,2vw,22px);font-weight:1000}
 .world-grid{width:min(100%,1040px);margin:12px auto 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.portal{border:3px solid rgba(255,255,255,.7);border-radius:24px;padding:19px 15px;text-align:left;color:white;box-shadow:var(--shadow);min-height:104px;position:relative;overflow:hidden}
+.portal{position:relative;border:3px solid rgba(255,255,255,.7);border-radius:24px;padding:19px 15px;text-align:left;color:white;box-shadow:var(--shadow);min-height:104px;position:relative;overflow:hidden}
 .portal strong{display:block;font-size:clamp(19px,2.5vw,28px);line-height:1.05}
 .portal span{display:block;margin-top:6px;font-size:13px;font-weight:900;letter-spacing:.05em}
 .portal.active-world{background:linear-gradient(135deg,#29cbc2,#087a79)}
@@ -44,6 +44,7 @@ button{font:inherit;touch-action:manipulation}
 .portal.green{background:#299d57} .portal.yellow{background:#c39113} .portal.orange{background:#df7310}
 .portal.red{background:#b8323c} .portal.purple{background:#6e4aa1}
 .world-monster{height:160px;object-fit:contain;margin:0 auto 5px;display:block;filter:drop-shadow(0 12px 12px rgba(0,0,0,.22))}
+  .portal-monster{position:absolute;right:18px;bottom:0;width:120px;height:100px;object-fit:contain;pointer-events:none}
 .battle-wrap{width:min(100%,1050px);margin:auto}
 .battle-head{display:grid;grid-template-columns:minmax(160px,250px) 1fr;gap:16px;align-items:center}
 .monster-box{background:rgba(255,255,255,.11);border:2px solid rgba(255,255,255,.25);border-radius:24px;padding:10px;text-align:center}
@@ -218,10 +219,11 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
     </div>
     <div></div>
   </div>
-  <img class="world-monster" src="ending-monster.png" alt="Ending Monster">
+
   <div class="world-grid">
     <button class="portal active-world" id="endingPortal">
       <strong>🩵 ENDING MONSTER</strong><span>LEVEL 1 · -S / -ES / -IES</span>
+    <img class="portal-monster" src="ending-monster.png" alt="Ending Monster">
     </button>
     <button class="portal green" id="simplePortal"><strong>💚 SIMPLE SLIME</strong><span>LEVEL 2 · I / YOU / WE / THEY</span></button>
     <button class="portal yellow" id="sPortal"><strong>💛 S-MONSTER</strong><span>LEVEL 3 · HE / SHE / IT</span></button>

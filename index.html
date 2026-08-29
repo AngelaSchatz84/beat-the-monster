@@ -582,8 +582,11 @@ function monsterHitAnimation(){
 
 void monsterBox.offsetWidth;
 
-monsterBox.classList.add('hit-flash');
-if(lives===0) monsterBox.classList.add('final-hit'); 
+if(lives===0){
+  monsterBox.classList.add('final-hit');
+}else{
+  monsterBox.classList.add('hit-flash');
+}
 const explosion=document.createElement('div');
 explosion.className='explosion';
 explosion.textContent='💥';

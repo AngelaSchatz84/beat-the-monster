@@ -31,7 +31,7 @@ button{font:inherit;touch-action:manipulation}
 .topbar{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;width:100%;max-width:1100px;margin:0 auto 12px}
 .world-btn{justify-self:start;border:3px solid #bff6f1;background:white;color:#102526;border-radius:15px;padding:11px 15px;font-weight:1000}
 .title-wrap{text-align:center}
-.top-title{font-size:clamp(19px,3vw,31px);font-weight:1000}
+.top-title{font-size:clamp(26px,4.5vw,44px);font-weight:1000}
 .top-sub{font-size:12px;letter-spacing:.18em;font-weight:900;opacity:.95}
 .counter{justify-self:end;font-size:clamp(16px,2vw,22px);font-weight:1000}
 .world-grid{width:min(100%,1040px);margin:12px auto 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
@@ -204,7 +204,7 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
 
 <section id="start" class="screen active center">
   <div class="sub">PRESENT SIMPLE ADVENTURE</div>
-  <div class="logo">👾 BEAT THE MONSTER</div>
+  <div class="logo">BEAT THE MONSTER</div>
   <img class="monster-hero" src="ending-monster.png" alt="Ending Monster">
   <div class="sub">THE MONSTER WORLD IS WAITING...</div>
   <button class="big-btn" id="playBtn">▶ PLAY</button>
@@ -214,7 +214,7 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   <div class="topbar">
     <button class="world-btn" onclick="showScreen('start')">← START</button>
     <div class="title-wrap">
-      <div class="top-title">👾 MONSTER WORLD</div>
+      <div class="top-title">MONSTER WORLD</div>
       <div class="top-sub">CHOOSE YOUR MONSTER</div>
     </div>
     <div></div>
@@ -225,11 +225,16 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
       <strong>🩵 ENDING MONSTER</strong><span>LEVEL 1 · -S / -ES / -IES</span>
     <img class="portal-monster" src="ending-monster.png" alt="Ending Monster">
     </button>
-    <button class="portal green" id="simplePortal"><strong>💚 SIMPLE SLIME</strong><span>LEVEL 2 · I / YOU / WE / THEY</span></button>
-    <button class="portal yellow" id="sPortal"><strong>💛 S-MONSTER</strong><span>LEVEL 3 · HE / SHE / IT</span></button>
-    <button class="portal orange" id="negativePortal"><strong>🧡 NEGATIVE NINJA</strong><span>LEVEL 4 · DON'T / DOESN'T</span></button>
-    <button class="portal red" id="questionPortal"><strong>❤️ QUESTION BEAST</strong><span>LEVEL 5 · DO / DOES</span></button>
-    <button class="portal purple" id="bossPortal"><strong>💜 PRESENT SIMPLE BOSS</strong><span>FINAL LEVEL · MIXED CHALLENGE</span></button>
+    <button class="portal green" id="simplePortal"><strong>💚 SIMPLE SLIME</strong><span>LEVEL 2 · I / YOU / WE / THEY</span>
+    <img class="portal-monster" src="simple-slime.png" alt="Simple Slime"></button>
+    <button class="portal yellow" id="sPortal"><strong>💛 S-MONSTER</strong><span>LEVEL 3 · HE / SHE / IT</span>
+    <img class="portal-monster" src="s-monster.png" alt="S-Monster"></button>
+    <button class="portal orange" id="negativePortal"><strong>🧡 NEGATIVE NINJA</strong><span>LEVEL 4 · DON'T / DOESN'T</span>
+    <img class="portal-monster" src="negative-ninja.png" alt="Negative Ninja"></button>
+    <button class="portal red" id="questionPortal"><strong>❤️ QUESTION BEAST</strong><span>LEVEL 5 · DO / DOES</span>
+    <img class="portal-monster" src="question-beast.png" alt="Question Beast"></button>
+    <button class="portal purple" id="bossPortal"><strong>💜 PRESENT SIMPLE BOSS</strong><span>FINAL LEVEL · MIXED CHALLENGE</span>
+    <img class="portal-monster" src="present-simple-boss.png" alt="Present Simple Boss"></button>
   </div>
 </section>
 

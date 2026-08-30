@@ -731,7 +731,7 @@ $('hitBtn').onclick=()=>{
   judged=true; lives=Math.max(0,lives-1);
   monsterHitAnimation();
   if(gameMode!=='boss' && lives>0) playMonsterOhNo();
-  if(gameMode!=='boss' && lives>0) setTimeout(render,2200); else render();
+  if(gameMode!=='boss' && lives>0) setTimeout(render,5000); else render();
   if(lives===0) {
     const storageKey = gameMode==='boss' ? 'btm-boss-completed' : (gameMode==='question' ? 'btm-question-completed' : (gameMode==='negative' ? 'btm-negative-completed' : (gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed'))));
     localStorage.setItem(storageKey,'yes');

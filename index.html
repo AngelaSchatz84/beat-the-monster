@@ -250,10 +250,10 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
 }
 .finale-simple{
   position:absolute;
-  width:150px;
+  width:175px;
   height:auto;
   right:-40px;
-  top:330px;
+  top:290px;
 }
 
 .finale-s{
@@ -261,7 +261,7 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   width:150px;
   height:auto;
   left:80px;
-  top:500px;
+  top:390px;
 }
 
 .finale-negative{
@@ -269,7 +269,7 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   width:150px;
   height:auto;
   right:80px;
-  top:500px;
+  top:390px;
 }
 
 .finale-question{
@@ -277,7 +277,7 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   width:150px;
   height:auto;
   left:50%;
-  top:560px;
+  top:430px;
   margin-left:-75px;
 }
 #bossFinale.active .finale-simple{
@@ -939,7 +939,7 @@ function createFinaleConfetti(){
     piece.textContent=symbols[Math.floor(Math.random()*symbols.length)];
     piece.style.left=Math.random()*100+'%';
     piece.style.animationDelay=(Math.random()*1.2)+'s';
-    piece.style.animationDuration=(2+Math.random()*2)+'s';
+piece.style.animationDuration=(8+Math.random()*4)+'s';
     box.appendChild(piece);
   }
 }

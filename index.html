@@ -209,7 +209,8 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
 <body>
   <audio id="monsterLaugh" src="monster-laugh.wav" preload="auto"></audio>
 <audio id="bossLaugh" src="boss-laugh.wav" preload="auto"></audio>
-
+<audio id="monsterOhNo" src="monster-oh-no.wav" preload="auto"></audio>
+  
 <section id="start" class="screen active center">
   <div class="sub">PRESENT SIMPLE ADVENTURE</div>
   <div class="logo">BEAT THE MONSTER</div>
@@ -709,6 +710,11 @@ function startWithBossLaugh(){
   sound.play().catch(()=>{});
 setTimeout(()=>startNewGame('boss'),1600);
 }
+function playMonsterOhNo(){
+  const sound=$('monsterOhNo');
+  sound.currentTime=0;
+  sound.play().catch(()=>{});
+}
 $('playBtn').onclick=()=>showScreen('world');
 $('endingPortal').onclick=()=>startWithMonsterLaugh('ending');
 $('simplePortal').onclick=()=>startWithMonsterLaugh('simple');
@@ -724,6 +730,7 @@ $('hitBtn').onclick=()=>{
   if(judged) return;
   judged=true; lives=Math.max(0,lives-1);
   monsterHitAnimation();
+  if(gameMode!=='boss' && lives>0) playMonsterOhNo();
   render();
   if(lives===0) {
     const storageKey = gameMode==='boss' ? 'btm-boss-completed' : (gameMode==='question' ? 'btm-question-completed' : (gameMode==='negative' ? 'btm-negative-completed' : (gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed'))));

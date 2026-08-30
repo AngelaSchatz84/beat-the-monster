@@ -302,6 +302,11 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   </div>
 </section>
 
+<section id="bossFinale" class="screen center">
+  <div class="boss-finale-stage">
+    <h1>YOU BEAT THE MONSTER WORLD!</h1>
+  </div>
+</section>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -739,7 +744,7 @@ $('checkBtn').onclick=()=>{revealed=!revealed; render();};
 $('nextBtn').onclick=nextCard;
 $('shuffleBtn').onclick=()=>startNewGame(gameMode);
 function showBossFinale(){
-  showScreen('victory');
+showScreen('bossFinale');
 }
   $('hitBtn').onclick=()=>{
   if(judged) return;

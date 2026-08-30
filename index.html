@@ -219,6 +219,57 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   left:-40px;
   top:330px;
 }
+.finale-simple{
+  position:absolute;
+  width:150px;
+  height:auto;
+  right:-40px;
+  top:330px;
+}
+
+.finale-s{
+  position:absolute;
+  width:150px;
+  height:auto;
+  left:80px;
+  top:500px;
+}
+
+.finale-negative{
+  position:absolute;
+  width:150px;
+  height:auto;
+  right:80px;
+  top:500px;
+}
+
+.finale-question{
+  position:absolute;
+  width:150px;
+  height:auto;
+  left:50%;
+  top:560px;
+  margin-left:-75px;
+}
+#bossFinale.active .finale-simple{
+  animation:simpleEntrance 1s ease-out 1.5s both,
+            partyDance .65s ease-in-out 2.5s infinite alternate;
+}
+
+#bossFinale.active .finale-s{
+  animation:sEntrance 1s ease-out 2.2s both,
+            partyDance .7s ease-in-out 3.2s infinite alternate;
+}
+
+#bossFinale.active .finale-negative{
+  animation:negativeEntrance 1s ease-out 2.9s both,
+            partyDance .6s ease-in-out 3.9s infinite alternate;
+}
+
+#bossFinale.active .finale-question{
+  animation:questionEntrance 1s ease-out 3.6s both,
+            partyDance .65s ease-in-out 4.6s infinite alternate;
+}
 #bossFinale.active .finale-ending{
 animation:endingEntrance 1s ease-out .8s both, endingDance .6s ease-in-out 1.8s infinite alternate;
 }
@@ -241,6 +292,58 @@ animation:endingEntrance 1s ease-out .8s both, endingDance .6s ease-in-out 1.8s 
     transform:translateY(-12px) rotate(7deg);
   }
 }
+@keyframes simpleEntrance{
+  from{
+    transform:translateX(500px) rotate(20deg);
+    opacity:0;
+  }
+  to{
+    transform:translateX(0) rotate(0deg);
+    opacity:1;
+  }
+}
+
+@keyframes sEntrance{
+  from{
+    transform:translateY(500px) rotate(-20deg);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0) rotate(0deg);
+    opacity:1;
+  }
+}
+
+@keyframes negativeEntrance{
+  from{
+    transform:translateY(500px) rotate(20deg);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0) rotate(0deg);
+    opacity:1;
+  }
+}
+
+@keyframes questionEntrance{
+  from{
+    transform:translateY(500px) scale(.5);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0) scale(1);
+    opacity:1;
+  }
+}
+
+@keyframes partyDance{
+  from{
+    transform:translateY(0) rotate(-7deg);
+  }
+  to{
+    transform:translateY(-12px) rotate(7deg);
+  }
+}  
   #bossFinale.active .finale-boss{
   animation:bossDance .7s ease-in-out infinite alternate;
 }
@@ -352,6 +455,10 @@ animation:endingEntrance 1s ease-out .8s both, endingDance .6s ease-in-out 1.8s 
     <h1>YOU BEAT THE MONSTER WORLD!</h1>
 <img class="finale-boss" src="present-simple-boss.png" alt="Present Simple Boss">
 <img class="finale-monster finale-ending" src="ending-monster.png" alt="Ending Monster">
+<img class="finale-monster finale-simple" src="simple-slime.png" alt="Simple Slime">
+<img class="finale-monster finale-s" src="s-monster.png" alt="S-Monster">
+<img class="finale-monster finale-negative" src="negative-ninja.png" alt="Negative Ninja">
+<img class="finale-monster finale-question" src="question-beast.png" alt="Question Beast"> 
   </div>
 </section>
 <div class="toast" id="toast"></div>

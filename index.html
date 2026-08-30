@@ -738,7 +738,13 @@ $('hitBtn').onclick=()=>{
   monsterHitAnimation();
   if(gameMode!=='boss' && lives>0) playMonsterOhNo();
   if(gameMode==='boss' && lives>0) playBossOhNo();
- if(gameMode!=='boss' && lives>0) render(false); else render();
+if(lives>0) render(false); else render();
+if(gameMode==='boss' && lives>0){
+  const bossLivesAfterHit=lives;
+  setTimeout(()=>{
+    $('hearts').textContent='❤️'.repeat(bossLivesAfterHit)+'♡'.repeat(10-bossLivesAfterHit);
+  },1500);
+}
   if(gameMode!=='boss' && lives>0){
   const livesAfterHit=lives;
   setTimeout(()=>{

@@ -933,12 +933,12 @@ function createFinaleConfetti(){
 
   const symbols=['🎊','🎉','✨','⭐'];
 
-  for(let i=0;i<45;i++){
+  for(let i=0;i<200;i++){
     const piece=document.createElement('span');
     piece.className='confetti-piece';
     piece.textContent=symbols[Math.floor(Math.random()*symbols.length)];
     piece.style.left=Math.random()*100+'%';
-    piece.style.animationDelay=(Math.random()*1.2)+'s';
+    piece.style.animationDelay=(Math.random()*10)+'s';
 piece.style.animationDuration=(8+Math.random()*4)+'s';
     box.appendChild(piece);
   }

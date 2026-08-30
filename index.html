@@ -705,10 +705,10 @@ function startWithMonsterLaugh(mode){
 }
 $('playBtn').onclick=()=>showScreen('world');
 $('endingPortal').onclick=()=>startWithMonsterLaugh('ending');
-$('simplePortal').onclick=()=>startNewGame('simple');
-$('sPortal').onclick=()=>startNewGame('s');
-$('negativePortal').onclick=()=>startNewGame('negative');
-$('questionPortal').onclick=()=>startNewGame('question');
+$('simplePortal').onclick=()=>startWithMonsterLaugh('simple');
+$('sPortal').onclick=()=>startWithMonsterLaugh('s');
+$('negativePortal').onclick=()=>startWithMonsterLaugh('negative');
+$('questionPortal').onclick=()=>startWithMonsterLaugh('question');
 $('bossPortal').onclick=()=>startNewGame('boss');
 document.querySelectorAll('.locked').forEach(b=>b.onclick=()=>toast('🔒 Coming soon!'));
 $('checkBtn').onclick=()=>{revealed=!revealed; render();};

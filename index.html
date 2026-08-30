@@ -736,7 +736,7 @@ $('hitBtn').onclick=()=>{
   const livesAfterHit=lives;
   setTimeout(()=>{
     $('hearts').textContent='❤️'.repeat(livesAfterHit)+'♡'.repeat(10-livesAfterHit);
-  },4500);
+  },3500);
 }
   if(lives===0) {
     const storageKey = gameMode==='boss' ? 'btm-boss-completed' : (gameMode==='question' ? 'btm-question-completed' : (gameMode==='negative' ? 'btm-negative-completed' : (gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed'))));

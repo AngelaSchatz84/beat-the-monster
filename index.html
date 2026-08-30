@@ -208,6 +208,19 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   position:relative;
   transform:translateY(-180px);
 }
+#backToWorldBtn{
+  position:absolute;
+  bottom:35px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:16px 28px;
+  border:none;
+  border-radius:18px;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 8px 22px rgba(0,0,0,.28);
+  z-index:30;
 }
 #finaleConfetti{
   position:absolute;
@@ -496,6 +509,7 @@ animation:endingEntrance 1s ease-out .8s both, endingDance .6s ease-in-out 1.8s 
 <img class="finale-monster finale-negative" src="negative-ninja.png" alt="Negative Ninja">
 <img class="finale-monster finale-question" src="question-beast.png" alt="Question Beast"> 
   </div>
+<button id="backToWorldBtn">🌍 BACK TO MONSTER WORLD</button>
 </section>
 <div class="toast" id="toast"></div>
 
@@ -923,6 +937,7 @@ function playMonsterVictory(){
   sound.play().catch(()=>{});
 }
 $('playBtn').onclick=()=>showScreen('world');
+$('backToWorldBtn').onclick=()=>showScreen('world');
 $('endingPortal').onclick=()=>startWithMonsterLaugh('ending');
 $('simplePortal').onclick=()=>startWithMonsterLaugh('simple');
 $('sPortal').onclick=()=>startWithMonsterLaugh('s');

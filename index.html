@@ -207,6 +207,35 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
 .boss-finale-stage{
   position:relative;
 }
+#finaleConfetti{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:20;
+}
+.confetti-piece{
+  position:absolute;
+  top:-60px;
+  font-size:28px;
+  animation-name:confettiFall;
+  animation-timing-function:linear;
+  animation-fill-mode:forwards;
+}
+
+@keyframes confettiFall{
+  0%{
+    transform:translateY(0) rotate(0deg);
+    opacity:0;
+  }
+  10%{
+    opacity:1;
+  }
+  100%{
+    transform:translateY(750px) rotate(720deg);
+    opacity:1;
+  }
+}
   .finale-boss{
   width:260px;
   max-width:70vw;
@@ -452,6 +481,7 @@ animation:endingEntrance 1s ease-out .8s both, endingDance .6s ease-in-out 1.8s 
 
 <section id="bossFinale" class="screen center">
   <div class="boss-finale-stage">
+<div id="finaleConfetti"></div>
     <h1>YOU BEAT THE MONSTER WORLD!</h1>
 <img class="finale-boss" src="present-simple-boss.png" alt="Present Simple Boss">
 <img class="finale-monster finale-ending" src="ending-monster.png" alt="Ending Monster">
@@ -897,8 +927,25 @@ document.querySelectorAll('.locked').forEach(b=>b.onclick=()=>toast('🔒 Coming
 $('checkBtn').onclick=()=>{revealed=!revealed; render();};
 $('nextBtn').onclick=nextCard;
 $('shuffleBtn').onclick=()=>startNewGame(gameMode);
+function createFinaleConfetti(){
+  const box=$('finaleConfetti');
+  box.innerHTML='';
+
+  const symbols=['🎊','🎉','✨','⭐'];
+
+  for(let i=0;i<45;i++){
+    const piece=document.createElement('span');
+    piece.className='confetti-piece';
+    piece.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+    piece.style.left=Math.random()*100+'%';
+    piece.style.animationDelay=(Math.random()*1.2)+'s';
+    piece.style.animationDuration=(2+Math.random()*2)+'s';
+    box.appendChild(piece);
+  }
+}
 function showBossFinale(){
-showScreen('bossFinale');
+  showScreen('bossFinale');
+  createFinaleConfetti();
 }
   $('hitBtn').onclick=()=>{
   if(judged) return;

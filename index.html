@@ -391,6 +391,9 @@ animation:endingEntrance 1s ease-out .8s both, endingDance .6s ease-in-out 1.8s 
 <audio id="monsterOhNo" src="monster-oh-no.wav" preload="auto"></audio>
 <audio id="bossOhNo" src="boss-oh-no.wav" preload="auto"></audio>
 <audio id="monsterVictory" src="monster-victory.wav" preload="auto"></audio>
+<audio id="finaleFirework" src="finale-firework.wav" preload="auto"></audio>
+<audio id="finaleAhh" src="finale-ahh.wav" preload="auto"></audio>
+<audio id="finaleCheer" src="finale-cheer.mp3" preload="auto"></audio>
   
 <section id="start" class="screen active center">
   <div class="sub">PRESENT SIMPLE ADVENTURE</div>
@@ -948,6 +951,22 @@ piece.style.animationDuration=(8+Math.random()*4)+'s';
 function showBossFinale(){
   showScreen('bossFinale');
   createFinaleConfetti();
+
+  const firework=$('finaleFirework');
+  firework.currentTime=0;
+  firework.play().catch(()=>{});
+  
+  setTimeout(()=>{
+  const ahh=$('finaleAhh');
+  ahh.currentTime=0;
+  ahh.play().catch(()=>{});
+},2400);
+
+  setTimeout(()=>{
+  const cheer=$('finaleCheer');
+  cheer.currentTime=0;
+  cheer.play().catch(()=>{});
+},5300); 
 }
   $('hitBtn').onclick=()=>{
   if(judged) return;

@@ -552,7 +552,7 @@ function suffixMarkup(card){
   if(card.ending==='es')return answer.slice(0,-2)+'<span class="sfx-es">ES</span>';
   return answer.slice(0,-1)+'<span class="sfx-s">S</span>';
 }
-function render(){
+function render(updateHearts=true){
   const c=deck[index]; $('counter').textContent=(index+1)+' / '+deck.length;
   if(gameMode==="boss"){
     $('modePill').style.display='inline-block';
@@ -583,7 +583,7 @@ function render(){
   $('answer').classList.toggle('show',revealed);
   $('checkBtn').textContent=revealed?'🙈 HIDE ANSWER':'🔎 CHECK ANSWER';
   $('judge').classList.toggle('show',revealed&&!judged);
-  if(!judged || gameMode==='boss' || lives===0) $('hearts').textContent='❤️'.repeat(lives)+'♡'.repeat(10-lives);
+  if(updateHearts) $('hearts').textContent='❤️'.repeat(lives)+'♡'.repeat(10-lives);
   $('partnerText').textContent=player===1?'🗣️ PLAYER 1 answers · 👀 PLAYER 2 checks':'🗣️ PLAYER 2 answers · 👀 PLAYER 1 checks';
 }
 function nextCard() {
@@ -731,7 +731,7 @@ $('hitBtn').onclick=()=>{
   judged=true; lives=Math.max(0,lives-1);
   monsterHitAnimation();
   if(gameMode!=='boss' && lives>0) playMonsterOhNo();
-  render();
+ if(gameMode!=='boss' && lives>0) render(false); else render();
   if(gameMode!=='boss' && lives>0){
   const livesAfterHit=lives;
   setTimeout(()=>{

@@ -209,6 +209,14 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   max-width:70vw;
   height:auto;
 }
+#bossFinale.active .finale-boss{
+  animation:bossDance .7s ease-in-out infinite alternate;
+}
+
+@keyframes bossDance{
+  from{transform:translateY(0) rotate(-3deg);}
+  to{transform:translateY(-18px) rotate(3deg);}
+}
 </style>
 </head>
 <body>

@@ -701,13 +701,13 @@ function startWithMonsterLaugh(mode){
   const sound=$('monsterLaugh');
   sound.currentTime=0;
   sound.play().catch(()=>{});
- setTimeout(()=>startNewGame(mode),900);
+ setTimeout(()=>startNewGame(mode),1200);
 }
 function startWithBossLaugh(){
   const sound=$('bossLaugh');
   sound.currentTime=0;
   sound.play().catch(()=>{});
-setTimeout(()=>startNewGame('boss'),900);
+setTimeout(()=>startNewGame('boss'),1200);
 }
 $('playBtn').onclick=()=>showScreen('world');
 $('endingPortal').onclick=()=>startWithMonsterLaugh('ending');

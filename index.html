@@ -707,7 +707,7 @@ function startWithBossLaugh(){
   const sound=$('bossLaugh');
   sound.currentTime=0;
   sound.play().catch(()=>{});
-setTimeout(()=>startNewGame('boss'),1200);
+setTimeout(()=>startNewGame('boss'),1600);
 }
 $('playBtn').onclick=()=>showScreen('world');
 $('endingPortal').onclick=()=>startWithMonsterLaugh('ending');

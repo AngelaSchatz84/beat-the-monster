@@ -583,7 +583,7 @@ function render(){
   $('answer').classList.toggle('show',revealed);
   $('checkBtn').textContent=revealed?'🙈 HIDE ANSWER':'🔎 CHECK ANSWER';
   $('judge').classList.toggle('show',revealed&&!judged);
-  $('hearts').textContent='❤️'.repeat(lives)+'♡'.repeat(10-lives);
+  if(!judged || gameMode==='boss' || lives===0) $('hearts').textContent='❤️'.repeat(lives)+'♡'.repeat(10-lives);
   $('partnerText').textContent=player===1?'🗣️ PLAYER 1 answers · 👀 PLAYER 2 checks':'🗣️ PLAYER 2 answers · 👀 PLAYER 1 checks';
 }
 function nextCard() {
@@ -731,7 +731,13 @@ $('hitBtn').onclick=()=>{
   judged=true; lives=Math.max(0,lives-1);
   monsterHitAnimation();
   if(gameMode!=='boss' && lives>0) playMonsterOhNo();
-  if(gameMode!=='boss' && lives>0) setTimeout(render,5000); else render();
+  render();
+  if(gameMode!=='boss' && lives>0){
+  const livesAfterHit=lives;
+  setTimeout(()=>{
+    $('hearts').textContent='❤️'.repeat(livesAfterHit)+'♡'.repeat(10-livesAfterHit);
+  },2800);
+}
   if(lives===0) {
     const storageKey = gameMode==='boss' ? 'btm-boss-completed' : (gameMode==='question' ? 'btm-question-completed' : (gameMode==='negative' ? 'btm-negative-completed' : (gameMode==='s' ? 'btm-s-completed' : (gameMode==='simple' ? 'btm-simple-completed' : 'btm-ending-completed'))));
     localStorage.setItem(storageKey,'yes');

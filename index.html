@@ -941,6 +941,7 @@ $('backToWorldBtn').onclick=()=>{
   const music=$('bossVictoryMusic');
   music.pause();
   music.currentTime=0;
+  music.load();
   showScreen('world');
 };
 $('endingPortal').onclick=()=>startWithMonsterLaugh('ending');

@@ -937,7 +937,12 @@ function playMonsterVictory(){
   sound.play().catch(()=>{});
 }
 $('playBtn').onclick=()=>showScreen('world');
-$('backToWorldBtn').onclick=()=>showScreen('world');
+$('backToWorldBtn').onclick=()=>{
+  const music=$('bossVictoryMusic');
+  music.pause();
+  music.currentTime=0;
+  showScreen('world');
+};
 $('endingPortal').onclick=()=>startWithMonsterLaugh('ending');
 $('simplePortal').onclick=()=>startWithMonsterLaugh('simple');
 $('sPortal').onclick=()=>startWithMonsterLaugh('s');

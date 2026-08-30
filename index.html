@@ -738,7 +738,10 @@ document.querySelectorAll('.locked').forEach(b=>b.onclick=()=>toast('🔒 Coming
 $('checkBtn').onclick=()=>{revealed=!revealed; render();};
 $('nextBtn').onclick=nextCard;
 $('shuffleBtn').onclick=()=>startNewGame(gameMode);
-$('hitBtn').onclick=()=>{
+function showBossFinale(){
+  showScreen('victory');
+}
+  $('hitBtn').onclick=()=>{
   if(judged) return;
   judged=true; lives=Math.max(0,lives-1);
   monsterHitAnimation();
@@ -789,7 +792,11 @@ if(gameMode==='boss' && lives>0){
       vText.innerHTML='Great teamwork! You mastered <b>-s, -es and -ies</b>.';
       vImg.src='ending-monster.png';
     }
-    setTimeout(()=>showScreen('victory'),1600);
+  if(gameMode==='boss'){
+  setTimeout(showBossFinale,1600);
+}else{
+  setTimeout(()=>showScreen('victory'),1600);
+}
   } else {
     toast('💥 HIT! '+lives+' lives left');
     setTimeout(nextCard,4700);

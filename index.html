@@ -208,7 +208,7 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
 </head>
 <body>
   <audio id="monsterLaugh" src="monster-laugh.wav" preload="auto"></audio>
-<audio id="bossLaugh" src="boss-laugh.mp3" preload="auto"></audio>
+<audio id="bossLaugh" src="boss-laugh.wav" preload="auto"></audio>
 
 <section id="start" class="screen active center">
   <div class="sub">PRESENT SIMPLE ADVENTURE</div>
@@ -703,13 +703,19 @@ function startWithMonsterLaugh(mode){
   sound.play().catch(()=>{});
   startNewGame(mode);
 }
+function startWithBossLaugh(){
+  const sound=$('bossLaugh');
+  sound.currentTime=0;
+  sound.play().catch(()=>{});
+  startNewGame('boss');
+}
 $('playBtn').onclick=()=>showScreen('world');
 $('endingPortal').onclick=()=>startWithMonsterLaugh('ending');
 $('simplePortal').onclick=()=>startWithMonsterLaugh('simple');
 $('sPortal').onclick=()=>startWithMonsterLaugh('s');
 $('negativePortal').onclick=()=>startWithMonsterLaugh('negative');
 $('questionPortal').onclick=()=>startWithMonsterLaugh('question');
-$('bossPortal').onclick=()=>startNewGame('boss');
+$('bossPortal').onclick=()=>startWithBossLaugh();
 document.querySelectorAll('.locked').forEach(b=>b.onclick=()=>toast('🔒 Coming soon!'));
 $('checkBtn').onclick=()=>{revealed=!revealed; render();};
 $('nextBtn').onclick=nextCard;

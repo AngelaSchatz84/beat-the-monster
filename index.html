@@ -211,6 +211,7 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
 <audio id="bossLaugh" src="boss-laugh.wav" preload="auto"></audio>
 <audio id="monsterOhNo" src="monster-oh-no.wav" preload="auto"></audio>
 <audio id="bossOhNo" src="boss-oh-no.wav" preload="auto"></audio>
+<audio id="monsterVictory" src="monster-victory.wav" preload="auto"></audio>
   
 <section id="start" class="screen active center">
   <div class="sub">PRESENT SIMPLE ADVENTURE</div>
@@ -721,6 +722,11 @@ function playBossOhNo(){
   sound.currentTime=0;
   sound.play().catch(()=>{});
 }
+function playMonsterVictory(){
+  const sound=$('monsterVictory');
+  sound.currentTime=0;
+  sound.play().catch(()=>{});
+}
 $('playBtn').onclick=()=>showScreen('world');
 $('endingPortal').onclick=()=>startWithMonsterLaugh('ending');
 $('simplePortal').onclick=()=>startWithMonsterLaugh('simple');
@@ -738,6 +744,7 @@ $('hitBtn').onclick=()=>{
   monsterHitAnimation();
   if(gameMode!=='boss' && lives>0) playMonsterOhNo();
   if(gameMode==='boss' && lives>0) playBossOhNo();
+  if(gameMode!=='boss' && lives===0) playMonsterVictory();
 if(lives>0) render(false); else render();
 if(gameMode==='boss' && lives>0){
   const bossLivesAfterHit=lives;

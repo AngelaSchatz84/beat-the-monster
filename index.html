@@ -220,7 +220,7 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   top:330px;
 }
 #bossFinale.active .finale-ending{
-  animation:endingEntrance 1s ease-out .8s both;
+animation:endingEntrance 1s ease-out .8s both, endingDance .6s ease-in-out 1.8s infinite alternate;
 }
 
 @keyframes endingEntrance{
@@ -233,7 +233,15 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
     opacity:1;
   }
 }
-#bossFinale.active .finale-boss{
+@keyframes endingDance{
+  from{
+    transform:translateY(0) rotate(-7deg);
+  }
+  to{
+    transform:translateY(-12px) rotate(7deg);
+  }
+}
+  #bossFinale.active .finale-boss{
   animation:bossDance .7s ease-in-out infinite alternate;
 }
 

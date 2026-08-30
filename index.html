@@ -204,10 +204,34 @@ body.boss-mode .shuffle{border-color:#b995dc}
 body.boss-mode .power{background:#eadcf8}
 .mode-pill{display:none;margin:0 auto 10px;padding:7px 14px;border-radius:999px;font-weight:900}
 body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;border:2px solid #b995dc}
-.finale-boss{
+.boss-finale-stage{
+  position:relative;
+}
+  .finale-boss{
   width:260px;
   max-width:70vw;
   height:auto;
+}
+.finale-ending{
+  position:absolute;
+  width:150px;
+  height:auto;
+  left:-120px;
+  top:170px;
+}
+#bossFinale.active .finale-ending{
+  animation:endingEntrance 1s ease-out .8s both;
+}
+
+@keyframes endingEntrance{
+  from{
+    transform:translateX(-500px) rotate(-20deg);
+    opacity:0;
+  }
+  to{
+    transform:translateX(0) rotate(0deg);
+    opacity:1;
+  }
 }
 #bossFinale.active .finale-boss{
   animation:bossDance .7s ease-in-out infinite alternate;
@@ -319,6 +343,7 @@ body.boss-mode .mode-pill{display:inline-block;background:#eadcf8;color:#4e2f79;
   <div class="boss-finale-stage">
     <h1>YOU BEAT THE MONSTER WORLD!</h1>
 <img class="finale-boss" src="present-simple-boss.png" alt="Present Simple Boss">
+<img class="finale-monster finale-ending" src="ending-monster.png" alt="Ending Monster">
   </div>
 </section>
 <div class="toast" id="toast"></div>
